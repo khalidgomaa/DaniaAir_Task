@@ -19,13 +19,13 @@
     <div class="container">  
     <div class="row align-items-center m-4 d-flex"> 
         <div class="col text-center pl-5">
-            <img src="{{ asset('logos/logo1.jpg') }}" alt="dania Logo" class="img-fluid" style="max-height: 70px;">
+            <img src="{{ asset('logos/logo1.jpg') }}" alt="dania Logo" class="img-fluid" style="max-height: 50px;">
         </div>
         <div class="col text-center">
-            <h1>DAILY SAFETY INSPECTION CHECKLIST</h1>
+            <h1>Checklist Form</h1>
         </div>
         <div class="col text-center">
-            <img src="{{ asset('logos/logo2.jpg') }}" alt="Right Logo" class="img-fluid" style="max-height: 70px;">
+            <img src="{{ asset('logos/logo2.jpg') }}" alt="Right Logo" class="img-fluid" style="max-height: 50px;">
         </div>
     </div>
 </div>
