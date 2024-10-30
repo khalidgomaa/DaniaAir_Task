@@ -5,7 +5,7 @@
   
 @include("layouts.alert")
 
-    <form action="{{ route('checklist.store') }}" method="POST">
+    <form action="{{ route('checklists.store') }}" method="POST">
         @csrf
 
         @foreach($categories as $category)

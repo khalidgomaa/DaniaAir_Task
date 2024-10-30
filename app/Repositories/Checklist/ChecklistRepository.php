@@ -2,13 +2,15 @@
 
 namespace App\Repositories\Checklist;
 
+use App\Models\User;
 use App\Models\Answer;
+use App\Models\Category;
 use App\Models\Checklist;
 use Illuminate\Support\Facades\DB;
 
 class ChecklistRepository implements ChecklistRepositoryInterface
 {
-    public function all()
+    public function getAll()
     {
         return Checklist::with('user')->get();
     }
@@ -20,7 +22,17 @@ class ChecklistRepository implements ChecklistRepositoryInterface
         
     }
 
-    public function create(array $data)
+
+    public function getCreateData()
+    {
+     
+        $categories = Category::with('questions')->get();
+        $users = User::all();
+        
+        return compact('categories', 'users'); 
+    }
+
+    public function store(array $data)
     {
         DB::beginTransaction();
 

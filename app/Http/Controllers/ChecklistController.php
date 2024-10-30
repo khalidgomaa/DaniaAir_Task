@@ -5,13 +5,38 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Http\Requests\CreateChecklistRequest;
+use App\Repositories\Checklist\ChecklistRepositoryInterface;
 
 class ChecklistController extends Controller
 {
+
+    protected $checklistRepository;
+
+    public function __construct(ChecklistRepositoryInterface $checklistRepository)
+    {
+        $this->checklistRepository = $checklistRepository;
+    }
+
+
     public function create()
     {
-        $categories = Category::with('questions')->get();
-        $users = User::all();
-        return view('checklist.create', compact('categories', 'users'));
+        $createData = $this->checklistRepository->getCreateData(); 
+        return view('checklist.create', $createData); 
     }
+
+
+    public function store(CreateChecklistRequest $request)
+    {
+        $data = $request->validated();
+        
+        try {
+            $checklist = $this->checklistRepository->store($data);
+            
+            return redirect()->back()->with('success', 'Checklist submitted successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error' ,'Error submitting checklist: ' );
+        }
+    }
+    
 }

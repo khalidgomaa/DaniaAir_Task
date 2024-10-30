@@ -6,11 +6,12 @@ use App\Models\Checklist;
 
 interface ChecklistRepositoryInterface
 {
-    public function all();
+    public function getAll();
 
     public function find($id);
 
-    public function create(array $data);
+    public function store(array $data);
+    public function getCreateData();
 
     public function update($id, array $data);
 
