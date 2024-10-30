@@ -9,3 +9,6 @@ Route::get('/', function () {
 
 
 
+Route::resource('checklists', ChecklistController::class);
+
+
