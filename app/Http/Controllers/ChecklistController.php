@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Http\Requests\CreateChecklistRequest;
 use App\Repositories\Checklist\ChecklistRepositoryInterface;
 
@@ -17,7 +18,17 @@ class ChecklistController extends Controller
     {
         $this->checklistRepository = $checklistRepository;
     }
+    public function index()
+    {
+        $checklists = $this->checklistRepository->getAll();
+        return view('checklist.index', compact('checklists'));
+    }
 
+    public function show($id)
+    {
+        $checklist = $this->checklistRepository->find($id);
+        return view('checklist.show', compact('checklist'));
+    }
 
     public function create()
     {
@@ -32,14 +43,15 @@ class ChecklistController extends Controller
         
         try {
             $checklist = $this->checklistRepository->store($data);
-            
-            return redirect()->back()->with('success', 'Checklist submitted successfully!');
+            session()->flash('success', 'Checklist created successfully.');
+            return redirect()->back()->withInput()->with('success', 'Checklist created successfully.');
+
+            // return redirect()->route('checklists.index');
         } catch (\Exception $e) {
-            session()->flash('error', 'Failed to create the checklist. Please try again.');
-
-            return redirect()->back()->withErrors(['error' => 'Unable to add checklist.']);
-
+            Log::error('Error creating checklist: ' . $e->getMessage()); 
          
+            return redirect()->back()->withInput()->with('error', 'failed creating Checklist  .');
+      
         }
     }
     

@@ -12,7 +12,9 @@ class ChecklistRepository implements ChecklistRepositoryInterface
 {
     public function getAll()
     {
-        return Checklist::with('user')->get();
+        // return Checklist::with('user')->latest()->get();   
+        return Checklist::with('user')->orderBy('created_at', 'desc')->get();
+
     }
 
     public function find($id)
