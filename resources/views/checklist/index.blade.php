@@ -6,6 +6,10 @@
 
     @include('layouts.alert')
 
+    <!-- Create Button -->
+    <div class="mb-3">
+        <a href="{{ route('checklists.create') }}" class="btn btn-success">Create New Checklist</a>
+    </div>
 
     <table class="table table-bordered">
         <thead>
