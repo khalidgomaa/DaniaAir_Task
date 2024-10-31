@@ -4,7 +4,8 @@
 <div class="container border border-primary p-4 rounded">
 <h2 class="my-4">Create Checklist </h2>
   
-@include("layouts.alert")
+@include('layouts.alert')
+
 
     <form id="createChecklistForm" action="{{ route('checklists.store') }}" method="POST">
         @csrf
@@ -127,7 +128,8 @@
                 url: "{{ route('checklists.store') }}",
                 data: $(this).serialize(),
                 success: function (response) {
-              
+                    window.location.href = "{{ route('checklists.index') }}";
+
                 },
                 error: function (xhr) {
                     if (xhr.status === 422) {

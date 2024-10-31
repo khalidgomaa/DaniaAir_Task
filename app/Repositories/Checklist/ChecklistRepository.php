@@ -65,11 +65,13 @@ class ChecklistRepository implements ChecklistRepositoryInterface
 
     public function update($id, array $data)
     {
-
+ 
+        
     }
 
     public function delete($id)
     {
-
+        $checklist = $this->find($id);
+      return  $checklist->delete();
     }
 }

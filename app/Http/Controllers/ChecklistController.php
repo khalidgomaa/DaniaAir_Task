@@ -7,6 +7,7 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Http\Requests\CreateChecklistRequest;
+use App\Http\Requests\UpdateChecklistRequest;
 use App\Repositories\Checklist\ChecklistRepositoryInterface;
 
 class ChecklistController extends Controller
@@ -44,9 +45,8 @@ class ChecklistController extends Controller
         try {
             $checklist = $this->checklistRepository->store($data);
             session()->flash('success', 'Checklist created successfully.');
-            return redirect()->back()->withInput()->with('success', 'Checklist created successfully.');
-
-            // return redirect()->route('checklists.index');
+            return redirect()->route('checklists.index');
+         
         } catch (\Exception $e) {
             Log::error('Error creating checklist: ' . $e->getMessage()); 
          
@@ -55,4 +55,32 @@ class ChecklistController extends Controller
         }
     }
     
+
+    public function edit($id){
+        
+    }
+    public function update(UpdateChecklistRequest $request, $id)
+    {
+        $data = $request->validated();
+    
+        try {
+            $checklist = $this->checklistRepository->update($id, $data);
+            session()->flash('success', 'Checklist updated successfully.');
+            return redirect()->route('checklists.index')->with('success', 'Checklist deleted successfully.');
+        } catch (\Exception $e) {
+            Log::error('Error updating checklist: ' . $e->getMessage());
+            return redirect()->back()->withInput()->with('error', 'Failed to update checklist.');
+        }
+    }
+    
+    public function destroy($id)
+    {
+        try {
+            $this->checklistRepository->delete($id);
+            return redirect()->route('checklists.index')->with('success', 'Checklist deleted successfully.');
+        } catch (\Exception $e) {
+            Log::error('Error deleting checklist: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to delete checklist.');
+        }
+    }
 }
