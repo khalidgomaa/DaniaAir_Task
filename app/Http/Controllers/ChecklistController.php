@@ -33,8 +33,14 @@ class ChecklistController extends Controller
 
     public function create()
     {
+        try {
         $createData = $this->checklistRepository->getCreateData(); 
+        
         return view('checklist.create', $createData); 
+    } catch (\Exception $e) {
+        Log::error('Error get  checklist: ' . $e->getMessage());
+        return redirect()->back()->with('error', 'Failed to get this route .');
+    }
     }
 
 
@@ -45,31 +51,64 @@ class ChecklistController extends Controller
         try {
             $checklist = $this->checklistRepository->store($data);
             session()->flash('success', 'Checklist created successfully.');
-            return redirect()->route('checklists.index');
-         
+            return response()->json([
+                'status' => true,
+                'message' =>'Checklist added successfully',
+                'data'=>$checklist,
+            ]);         
         } catch (\Exception $e) {
             Log::error('Error creating checklist: ' . $e->getMessage()); 
          
-            return redirect()->back()->withInput()->with('error', 'failed creating Checklist  .');
-      
+            return response()->json([
+                'status' => false,
+                'errors' => $data->errors(),
+            ]);      
         }
     }
     
-
-    public function edit($id){
-        
+    
+    
+    public function edit($id) {
+        try {
+            $checklist = $this->checklistRepository->find($id);
+            $createData = $this->checklistRepository->getCreateData(); 
+            
+      
+            return view('checklist.edit', [
+                'categories' => $createData['categories'],
+                'checklist' => $checklist,
+                'users' => $createData['users'], 
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error deleting checklist: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error getting this checklist page.');
+        }
     }
+    
+    
+
+  
     public function update(UpdateChecklistRequest $request, $id)
     {
         $data = $request->validated();
     
         try {
             $checklist = $this->checklistRepository->update($id, $data);
+    
             session()->flash('success', 'Checklist updated successfully.');
-            return redirect()->route('checklists.index')->with('success', 'Checklist deleted successfully.');
+            return response()->json([
+                'status' => true,
+                'message' => 'Checklist updated successfully',
+                'data' => $checklist,
+            ]);
         } catch (\Exception $e) {
             Log::error('Error updating checklist: ' . $e->getMessage());
-            return redirect()->back()->withInput()->with('error', 'Failed to update checklist.');
+            session()->flash('error', 'Failed to update this checklist.');
+    
+            return response()->json([
+                'status' => false,
+                'errors' => $e->getMessage(), // Optionally, return specific error messages
+            ]);
         }
     }
     

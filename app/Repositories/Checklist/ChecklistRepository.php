@@ -19,6 +19,9 @@ class ChecklistRepository implements ChecklistRepositoryInterface
 
     public function find($id)
     {
+        
+        $categories = Category::with('questions')->get();
+        $users = User::all();
         return Checklist::with(relations: ['answers.question', 'user'])->findOrFail($id);
 
         
@@ -31,7 +34,11 @@ class ChecklistRepository implements ChecklistRepositoryInterface
         $categories = Category::with('questions')->get();
         $users = User::all();
         
-        return compact('categories', 'users'); 
+     
+    return [
+        'categories' => $categories,
+        'users' => $users,
+    ];
     }
 
     public function store(array $data)
@@ -65,9 +72,55 @@ class ChecklistRepository implements ChecklistRepositoryInterface
 
     public function update($id, array $data)
     {
- 
-        
+        DB::beginTransaction();
+    
+        try {
+       
+            $checklist = Checklist::find($id);
+            
+       
+            if (!$checklist) {
+                return null; 
+            }
+    
+       
+            $checklist->inspector = $data['inspector'];
+            $checklist->date = $data['date'];
+            $checklist->time = $data['time'];
+            $checklist->save();
+    
+            foreach ($data['answers'] as $answer) {
+          
+                $existingAnswer = Answer::where('checklist_id', $checklist->id)
+                                         ->where('question_id', $answer['question_id'])
+                                         ->first();
+    
+                if ($existingAnswer) {
+            
+                    $existingAnswer->response = $answer['response'];
+                    $existingAnswer->comments = $answer['comments'] ?? null;
+                    $existingAnswer->save();
+                } else {
+             
+                    Answer::create([
+                        'checklist_id' => $checklist->id,
+                        'question_id' => $answer['question_id'],
+                        'response' => $answer['response'],
+                        'comments' => $answer['comments'] ?? null,
+                    ]);
+                }
+            }
+    
+            DB::commit();
+    
+            return $checklist;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return null; 
+        }
     }
+    
+    
 
     public function delete($id)
     {
