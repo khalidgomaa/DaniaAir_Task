@@ -13,15 +13,11 @@ Used PHP version 8.3.12 for development.
 
 ##  4. Entity-Relationship Diagram (ERD)
 Designed an Entity-Relationship Diagram (ERD) for the checklist structure to visualize the database relationships and ensure proper organization.
-+----------------+       +-----------------+       +----------------+       +----------------+       +----------------+
-|    Users       |       |    Categories    |       |     Questions    |       |   Checklists    |       |    Answers     |
-+----------------+       +-----------------+       +----------------+       +----------------+       +----------------+
-| id (PK)        |       | id (PK)         |       | id (PK)         |       | id (PK)        |       | id (PK)        |
-| name           |       | name_ar         |       | category_id (FK)|-----> | inspector (FK) |       | checklist_id (FK) |
-| email          |       | name_en         |       | text_ar         |       | date           |       | question_id (FK)  |
-| password       |       | timestamps       |       | text_en         |       | time           |       | response        |
-| timestamps      |       +-----------------+       | timestamps       |       | timestamps     |       | comments        |
-+----------------+                                 +----------------+       +----------------+       +----------------+
+Users: id (PK), name, email, password, timestamps
+Categories: id (PK), name_ar, name_en, timestamps
+Questions: id (PK), category_id (FK), text_ar, text_en, timestamps
+Checklists: id (PK), inspector (FK), date, time, timestamps
+Answers: id (PK), checklist_id (FK), question_id (FK), response, comments
 
 
 ##  5. Migration Files
