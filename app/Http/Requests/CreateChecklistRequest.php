@@ -26,7 +26,7 @@ class CreateChecklistRequest extends FormRequest
             'answers.*.response' => 'required|in:yes,no',
             'answers.*.comments' => 'nullable|string',
             'inspector' => 'required|exists:users,id',
-            'inspection_date' => 'required|date',
+            'date' => 'required|date',
             'time' => 'required|date_format:H:i',
         ];
     }
@@ -37,7 +37,7 @@ class CreateChecklistRequest extends FormRequest
             'answers.*.question_id.required' => 'The question ID is required.',
             'answers.*.response.required' => 'The response is required.',
             'inspector.required' => 'The inspector is required.',
-            'inspection_date.required' => 'The inspection date is required.',
+            'date.required' => 'The inspection date is required.',
             'time.required' => 'The time is required.',
         ];
     }

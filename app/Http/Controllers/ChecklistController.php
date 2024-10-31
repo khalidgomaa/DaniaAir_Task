@@ -35,7 +35,11 @@ class ChecklistController extends Controller
             
             return redirect()->back()->with('success', 'Checklist submitted successfully!');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error' ,'Error submitting checklist: ' );
+            session()->flash('error', 'Failed to create the checklist. Please try again.');
+
+            return redirect()->back()->withErrors(['error' => 'Unable to add checklist.']);
+
+         
         }
     }
     

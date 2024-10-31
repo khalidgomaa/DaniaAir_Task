@@ -39,7 +39,7 @@ class ChecklistRepository implements ChecklistRepositoryInterface
         try {
             $checklist = Checklist::create([
                 'inspector' => $data['inspector'],
-                'date' => $data['inspection_date'],
+                'date' => $data['date'],
                 'time' => $data['time'],
             ]);
 
