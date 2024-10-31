@@ -2,6 +2,7 @@
 
 @section('content')
 <div class="container border border-primary p-4 rounded">
+<h2 class="my-4">Create Checklist </h2>
   
 @include("layouts.alert")
 
@@ -11,39 +12,40 @@
         @foreach($categories as $category)
             <h4 class="mt-4">{{ $category->name_en }} <small class="text-muted">{{ $category->name_ar }}</small></h4>
           
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Questions</th>
-                        <th>Responses</th>
-                        <th>Comments</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($category->questions as $question)
-                        <tr>
-                            <td>
-                                <label>{{ $question->text_en }}<br><small class="text-muted">{{ $question->text_ar }}</small></label>
-                            </td>
-                            <td>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="answers[{{ $question->id }}][response]" value="yes">
-                                    <label class="form-check-label">Yes</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="answers[{{ $question->id }}][response]" value="no">
-                                    <label class="form-check-label">No</label>
-                                </div>
-                                <div class="invalid-feedback response-error"></div>
-                            </td>
-                            <td>
-                                <input type="hidden" name="answers[{{ $question->id }}][question_id]" value="{{ $question->id }}">
-                                <input type="text" name="answers[{{ $question->id }}][comments]" placeholder="Comments" class="form-control" />
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+            <table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Questions</th>
+            <th>Responses</th>
+            <th>Comments</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach($category->questions as $question)
+            <tr>
+                <td>
+                    <label>{{ $question->text_en }}<br><small class="text-muted">{{ $question->text_ar }}</small></label>
+                </td>
+                <td>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="answers[{{ $question->id }}][response]" value="yes">
+                        <label class="form-check-label">Yes</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="answers[{{ $question->id }}][response]" value="no">
+                        <label class="form-check-label">No</label>
+                    </div>
+                    <div class="invalid-feedback response-error"></div>
+                </td>
+                <td>
+                    <input type="hidden" name="answers[{{ $question->id }}][question_id]" value="{{ $question->id }}">
+                    <input type="text" name="answers[{{ $question->id }}][comments]" placeholder="Comments" class="form-control" />
+                </td>
+            </tr>
+        @endforeach
+    </tbody>
+</table>
+
         @endforeach
 
         <div class="form-group col-md-4">
